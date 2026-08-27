@@ -27,9 +27,12 @@ body {
 .portfolio-content {
   margin-top: 40px;
   padding: 40px;
+  display: grid;
+  gap: 40px;
 }
 
 .portfolio-card {
+  max-width: 370px;
   border: 2px solid #000;
   border-radius: 4px;
 }
