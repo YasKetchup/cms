@@ -7,29 +7,38 @@ function addWorkCard(params = {}) {
   template.content.querySelector(".portfolio-card-description").textContent =
     params.description;
   template.content.querySelector(".portfolio-card-img").src = params.image;
+  template.content.querySelector(".portfolio-card-link").href = params.link;
   const clone = document.importNode(template.content, true);
   container.appendChild(clone);
 }
 
+function getWorks() {
+  return fetch(
+    "https://cdn.contentful.com/spaces/k5bipqoissh0/environments/master/entries?access_token=b8ZmCwCU7cykq_pZo4WJ6qkh9Za4E1CXw7m7U52tqIk&content_type=work",
+  )
+    .then((res) => {
+      return res.json();
+    })
+    .then((data) => {
+      const fieldsCollection = data.items.map((item) => {
+        return {
+          title: item.fields.titulo,
+          description: item.fields.descripcion,
+          link: item.fields.url,
+        };
+      });
+      return fieldsCollection;
+    });
+}
+
 function main() {
-  addWorkCard({
-    title: "Project 1",
-    description: "Description of Project 1",
-    image:
-      "https://i.pinimg.com/736x/49/0e/af/490eafcde12cf7634ff8cf33241a318f.jpg",
-  });
-  addWorkCard({
-    title: "Project 2",
-    description: "Description of Project 2",
-    image:
-      "https://i.pinimg.com/736x/b4/39/83/b439835f0d72eb89cf65b881298e4d27.jpg",
-  });
-  addWorkCard({
-    title: "Project 3",
-    description: "Description of Project 3",
-    image:
-      "https://i.pinimg.com/736x/b6/14/4f/b6144f3d3dc2d3f353f5c6972b90b64b.jpg",
+  getWorks().then((works) => {
+    for (const w of works) {
+      addWorkCard(w);
+    }
   });
 }
 
 main();
+
+//https://cdn.contentful.com/spaces/k5bipqoissh0/environments/master/entries?access_token=b8ZmCwCU7cykq_pZo4WJ6qkh9Za4E1CXw7m7U52tqIk&content_type=work//
