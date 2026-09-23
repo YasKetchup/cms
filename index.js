@@ -21,10 +21,17 @@ function getWorks() {
     })
     .then((data) => {
       const fieldsCollection = data.items.map((item) => {
+        const imageId = item.fields.imagen.sys.id;
+        const imageAsset = data.includes.Asset.find(
+          (asset) => asset.sys.id === imageId,
+        );
+        item.fields.imagen = imageAsset.fields.file.url;
+
         return {
           title: item.fields.titulo,
           description: item.fields.descripcion,
           link: item.fields.url,
+          image: item.fields.imagen,
         };
       });
       return fieldsCollection;
